@@ -18,7 +18,7 @@ namespace Networking
 
         void OnConnected(NetworkMessage connectedMsg)
         {
-
+           
         }
     }
 }

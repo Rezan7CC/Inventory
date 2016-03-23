@@ -4,6 +4,16 @@ using System.Collections;
 
 namespace Networking
 {
+    public struct NetworkMessageType
+    {
+        public static short AddItem = MsgType.Highest + 1;
+    }
+
+    public class DataMessage : MessageBase
+    {
+        public object data;
+    }
+
     public class NetworkManager : MonoBehaviour
     {
         public int serverPort = 8888;
