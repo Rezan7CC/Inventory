@@ -1,0 +1,6 @@
+﻿namespace Items
+{
+    class Consumable
+    {
+    }
+}
