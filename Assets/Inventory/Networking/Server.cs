@@ -11,6 +11,7 @@ namespace Networking
         DatabaseManager databaseManager = new DatabaseManager();
         static int maxItemsPerPackage = 10;
 
+        // <summary> Setup application as server </summary>
         public override void Setup(NetworkManager networkManager)
         {
             this.networkManager = networkManager;
@@ -21,6 +22,7 @@ namespace Networking
             NetworkServer.RegisterHandler(NetworkMessageType.AddItem, OnAddItem);
         }
 
+        // <summary> Event for new connection with a client </summary>
         void OnClientConnected(NetworkMessage clientConnectedMsg)
         {
             List<Weapon> weapons = DatabaseManager.GetWeapons();
@@ -33,6 +35,7 @@ namespace Networking
             SendItems(clientConnectedMsg.conn.connectionId, consumables.ToArray(), consumables.Count);
         }
 
+        // <summary> Event for AddItem message from client to server </summary>
         void OnAddItem(NetworkMessage addItemMsg)
         {
             DataMessage itemMessage = addItemMsg.ReadMessage<DataMessage>();
@@ -41,6 +44,7 @@ namespace Networking
             RedirectItem(addItemMsg.conn.connectionId, item);
         }
 
+        // <summary> Send a message to all clients except one specified client </summary>
         public void SendToAllExcept(int connectionId, short msgType, MessageBase message)
         {
             foreach(NetworkConnection connection in NetworkServer.connections)
@@ -52,6 +56,7 @@ namespace Networking
             }
         }
 
+        // <summary> Redirect item from client to all other connected clients </summary>
         public void RedirectItem(int sourceConnectionID, Item item)
         {
             DataMessage addItemMessage = new DataMessage();
@@ -59,11 +64,14 @@ namespace Networking
             SendToAllExcept(sourceConnectionID, NetworkMessageType.AddItem, addItemMessage);
         }
 
+        // <summary> Convert item array into network packages and send them to a client </summary>
         public void SendItems(int connectionId, Item[] items, int arraySize)
         {
+            // Create packages while there are unpackaged items left
             int i = 0;
             while(i < arraySize)
             {
+                // Create a package with the size of maxItemsPerPackage and send it to client
                 Item[] itemPackage = new Item[maxItemsPerPackage];
 
                 for (int ii = 0; ii < maxItemsPerPackage; ii++, i++)
