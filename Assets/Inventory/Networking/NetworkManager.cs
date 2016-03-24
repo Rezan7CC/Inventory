@@ -19,7 +19,7 @@ namespace Networking
         public int serverPort = 8888;
         public string serverIp = "127.0.0.1";
 
-        IApplication application;
+        IApplication application = null;
 
         void Awake()
         {

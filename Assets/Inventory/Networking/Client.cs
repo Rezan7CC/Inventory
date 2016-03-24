@@ -4,8 +4,8 @@ namespace Networking
 {
     class Client : IApplication
     {
-        NetworkManager networkManager;
-        NetworkClient networkClient;
+        NetworkManager networkManager = null;
+        NetworkClient networkClient = null;
 
         public override void Setup(NetworkManager networkManager)
         {
