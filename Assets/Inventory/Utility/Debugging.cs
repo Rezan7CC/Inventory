@@ -13,6 +13,7 @@ namespace Utility
             Debug.Log(message);
         }
 
+#if SERVER
         [MenuItem("Inventory.db/ResetTables")]
         public static void ResetTables()
         {
@@ -62,5 +63,6 @@ namespace Utility
             DatabaseManager.AddConsumable(new Consumable("TestConsumable03"));
             DatabaseManager.Disconnect();
         }
+#endif
     }
 }

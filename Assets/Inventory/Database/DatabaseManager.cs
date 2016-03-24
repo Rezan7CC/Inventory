@@ -1,6 +1,8 @@
 ﻿using Items;
 using Utility;
 using System.Data;
+using System.Collections;
+using System.Collections.Generic;
 using Mono.Data.SqliteClient;
 
 namespace Database
@@ -13,8 +15,8 @@ namespace Database
 
         private static SqliteConnection dbConnection;
 
-        private static string weaponColumns = "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name text, damage real, speed real, critChance real)";
-        private static string armorColumns = "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name text, protection real, mobility real)";
+        private static string weaponColumns = "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name text, damage float, speed float, critChance float)";
+        private static string armorColumns = "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name text, protection float, mobility float)";
         private static string consumableColumns = "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name text)";
 
         public static void Connect()
@@ -131,6 +133,62 @@ namespace Database
                 }
                 Debugging.Print(row);
             }
+        }
+
+        public static List<Weapon> GetWeapons()
+        {
+            List<Weapon> weapons = new List<Weapon>();
+
+            SqliteCommand sqlCommand = new SqliteCommand("select * from Weapons", dbConnection);
+
+            SqliteDataReader dataReader = sqlCommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Weapon weapon = new Weapon();
+                weapon.name = dataReader.GetString(1);
+                weapon.damage = dataReader.GetFloat(2);
+                weapon.speed = dataReader.GetFloat(3);
+                weapon.critChance = dataReader.GetFloat(4);
+                weapons.Add(weapon);    
+            }
+
+            return weapons;
+        }
+
+        public static List<Armor> GetArmors()
+        {
+            List<Armor> armors = new List<Armor>();
+
+            SqliteCommand sqlCommand = new SqliteCommand("select * from Armors", dbConnection);
+
+            SqliteDataReader dataReader = sqlCommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Armor armor = new Armor();
+                armor.name = dataReader.GetString(1);
+                armor.protection = dataReader.GetFloat(2);
+                armor.mobility = dataReader.GetFloat(3);
+                armors.Add(armor);
+            }
+
+            return armors;
+        }
+
+        public static List<Consumable> GetConsumable()
+        {
+            List<Consumable> consumables = new List<Consumable>();
+
+            SqliteCommand sqlCommand = new SqliteCommand("select * from Consumables", dbConnection);
+
+            SqliteDataReader dataReader = sqlCommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Consumable consumable = new Consumable();
+                consumable.name = dataReader.GetString(1);
+                consumables.Add(consumable);
+            }
+
+            return consumables;
         }
     }
 }
