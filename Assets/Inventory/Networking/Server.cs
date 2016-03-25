@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Networking;
 using Items;
 using Database;
+using Utility;
 using System.Collections.Generic;
 
 namespace Networking
@@ -16,6 +17,10 @@ namespace Networking
         {
             this.networkManager = networkManager;
 
+            #if DEBUG
+            Debugging.PrintScreen("Setting up server");
+            #endif
+
             DatabaseManager.Connect();
             NetworkServer.Listen(networkManager.serverPort);
             NetworkServer.RegisterHandler(MsgType.Connect, OnClientConnected);
@@ -25,6 +30,11 @@ namespace Networking
         /// <summary> Event for new connection with a client </summary>
         void OnClientConnected(NetworkMessage clientConnectedMsg)
         {
+
+            #if DEBUG
+            Debugging.PrintScreen("Client connected");
+            #endif
+
             List<Weapon> weapons = DatabaseManager.GetWeapons();
             SendItems(clientConnectedMsg.conn.connectionId, weapons.ToArray(), weapons.Count);
 
@@ -38,8 +48,12 @@ namespace Networking
         /// <summary> Event for AddItem message from client to server </summary>
         void OnAddItem(NetworkMessage addItemMsg)
         {
-            DataMessage itemMessage = addItemMsg.ReadMessage<DataMessage>();
-            Item item = (Item)itemMessage.data;
+            #if DEBUG
+            Debugging.PrintScreen("Got item from client");
+            #endif
+
+            ItemMessage itemMessage = addItemMsg.ReadMessage<ItemMessage>();
+            Item item = itemMessage.item;
 
             RedirectItem(addItemMsg.conn.connectionId, item);
         }
@@ -59,34 +73,55 @@ namespace Networking
         /// <summary> Redirect item from client to all other connected clients </summary>
         public void RedirectItem(int sourceConnectionID, Item item)
         {
-            DataMessage addItemMessage = new DataMessage();
-            addItemMessage.data = item;
+            ItemMessage addItemMessage = new ItemMessage();
+            addItemMessage.item = item;
             SendToAllExcept(sourceConnectionID, NetworkMessageType.AddItem, addItemMessage);
         }
 
         /// <summary> Convert item array into network packages and send them to a client </summary>
         public void SendItems(int connectionId, Item[] items, int arraySize)
         {
+
             /// Create packages while there are unpackaged items left
             int i = 0;
             while(i < arraySize)
             {
-                /// Create a package with the size of maxItemsPerPackage and send it to client
-                Item[] itemPackage = new Item[maxItemsPerPackage];
+                /// Create a package with the max size of maxItemsPerPackage and send it to client
+                int itemsToSendCount = arraySize - i;
+                int packageSize = itemsToSendCount > maxItemsPerPackage ? maxItemsPerPackage : itemsToSendCount;
+                Item[] itemPackage = new Item[packageSize];
 
-                for (int ii = 0; ii < maxItemsPerPackage; ii++, i++)
+                for (int ii = 0; ii < packageSize; ii++, i++)
                 {
                     if (i >= arraySize)
+                    {
+                        #if DEBUG
+                        Debugging.PrintScreen("Error while converting items into packages");
+                        #endif
                         break;
+                    }
+                    if (i >= arraySize)
 
                     itemPackage[ii] = items[i];
                 }
 
-                DataArrayMessage dataArrayMsg = new DataArrayMessage();
-                dataArrayMsg.arraySize = maxItemsPerPackage;
-                dataArrayMsg.data = itemPackage;
-                NetworkServer.SendToClient(connectionId, NetworkMessageType.AddItems, dataArrayMsg);
+                #if DEBUG
+                foreach (Item item in itemPackage)
+                {
+                    if(item == null)
+                        Debugging.PrintScreen("Item in package is null which will cause a serialization error");
+                }
+                #endif
+
+                ItemArrayMessage itemArrayMsg = new ItemArrayMessage();
+                itemArrayMsg.items = itemPackage;
+              
+                NetworkServer.SendToClient(connectionId, NetworkMessageType.AddItems, itemArrayMsg);
             }
+
+            #if DEBUG
+            Debugging.PrintScreen("Sent items to client");
+            #endif
         }
     }
 }

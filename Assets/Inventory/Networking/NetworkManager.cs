@@ -11,15 +11,14 @@ namespace Networking
         public static short AddItems = MsgType.Highest + 2;
     }
 
-    public class DataMessage : MessageBase
+    public class ItemMessage : MessageBase
     {
-        public object data;
+        public Item item;
     }
 
-    public class DataArrayMessage : MessageBase
+    public class ItemArrayMessage : MessageBase
     {
-        public object[] data;
-        public int arraySize;
+        public Item[] items;
     }
 
     public class NetworkManager : MonoBehaviour
@@ -27,15 +26,17 @@ namespace Networking
         public int serverPort = 8888;
         public string serverIp = "127.0.0.1";
 
+        public IApplication NetworkApplication { get { return application; } }
         IApplication application = null;
 
         void Awake()
         {
-        #if SERVER
+#if SERVER
             application = new Server();
-        #elif CLIENT
+#elif CLIENT
             application = new Client();
-        #endif
+#endif
+
             application.Setup(this);
         }
     }

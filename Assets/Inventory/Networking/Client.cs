@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Networking;
 using System.Collections.Generic;
 using Items;
+using Utility;
 
 namespace Networking
 {
@@ -9,6 +10,7 @@ namespace Networking
         NetworkManager networkManager = null;
         NetworkClient networkClient = null;
 
+        public List<Item> InventoryItems { get { return items; } }
         List<Item> items = new List<Item>();
 
         /// <summary> Setup application as client </summary>
@@ -16,6 +18,9 @@ namespace Networking
         {
             this.networkManager = networkManager;
 
+            #if DEBUG
+            Debugging.PrintScreen("Setting up client");
+            #endif
             networkClient = new NetworkClient();
             networkClient.RegisterHandler(MsgType.Connect, OnConnected);
             networkClient.RegisterHandler(NetworkMessageType.AddItem, OnAddItem);
@@ -26,37 +31,48 @@ namespace Networking
         /// <summary> Event for new connection to server </summary
         void OnConnected(NetworkMessage connectedMsg)
         {
-           
+            #if DEBUG
+            Debugging.PrintScreen("Connected to server");
+            #endif
         }
 
         /// <summary> Event for single item packet message </summary>
         void OnAddItem(NetworkMessage addItemMsg)
         {
-            DataMessage dataMsg = addItemMsg.ReadMessage<DataMessage>();
-            if (dataMsg.data == null)
-                return;
-
-            Item item = (Item)dataMsg.data;
-            if(item != null)
+            ItemMessage itemMsg = addItemMsg.ReadMessage<ItemMessage>();
+            if (itemMsg.item == null)
             {
-                items.Add(item);
+                #if DEBUG
+                Debugging.PrintScreen("Received item is not valid");
+                #endif
+                return;
             }
+
+            #if DEBUG
+            Debugging.PrintScreen("Received package with one item");
+            #endif
+
+            items.Add(itemMsg.item);
         }
 
         /// <summary> Event for multiple items packet message </summary>
         void OnAddItems(NetworkMessage addItemsMsg)
         {
-            DataArrayMessage dataArrayMsg = addItemsMsg.ReadMessage<DataArrayMessage>();
-            foreach(object itemObj in dataArrayMsg.data)
+            ItemArrayMessage itemArrayMsg = addItemsMsg.ReadMessage<ItemArrayMessage>();
+
+            #if DEBUG
+            if (itemArrayMsg.items.Length <= 0)
+                Debugging.PrintScreen("Received item package is not valid");
+            else
+                Debugging.PrintScreen("Received package with multiple items");
+            #endif
+
+            foreach (Item tempItem in itemArrayMsg.items)
             {
-                if (itemObj == null)
+                if (tempItem == null)
                     continue;
 
-                Item item = (Item)itemObj;
-                if (item == null)
-                    continue;
-
-                items.Add(item);
+                items.Add(tempItem);
             }
         }
     }
