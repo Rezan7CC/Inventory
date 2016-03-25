@@ -4,6 +4,7 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using Mono.Data.SqliteClient;
+using UnityEngine;
 
 namespace Database
 {
@@ -24,7 +25,7 @@ namespace Database
             if (isConnected)
                 return;
 
-            dbConnection = new SqliteConnection("URI=file:" + dbFilename + ";");
+            dbConnection = new SqliteConnection("URI=file:" + Application.dataPath + "/" + dbFilename + ";");
             dbConnection.Open();
         }
 
@@ -151,7 +152,6 @@ namespace Database
                 weapon.critChance = dataReader.GetFloat(4);
                 weapons.Add(weapon);    
             }
-
             return weapons;
         }
 
