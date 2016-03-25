@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if SERVER && UNITY_EDITOR
 using UnityEditor;
+#endif
 using Database;
 using Items;
 using System.Collections;
@@ -13,7 +15,14 @@ namespace Utility
             Debug.Log(message);
         }
 
-#if SERVER
+        public static void PrintScreen(string message)
+        {
+            #if NGUI
+            NGUIDebug.Log(message);
+            #endif
+        }
+
+        #if SERVER && UNITY_EDITOR
         [MenuItem("Inventory.db/ResetTables")]
         public static void ResetTables()
         {
@@ -63,6 +72,6 @@ namespace Utility
             DatabaseManager.AddConsumable(new Consumable("TestConsumable03"));
             DatabaseManager.Disconnect();
         }
-#endif
+        #endif
     }
 }
