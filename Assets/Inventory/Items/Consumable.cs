@@ -1,5 +1,6 @@
 ﻿namespace Items
 {
+    [System.Serializable]
     public class Consumable : Item
     {
         public Consumable() { }

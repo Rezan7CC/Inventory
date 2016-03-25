@@ -1,5 +1,6 @@
 ﻿namespace Items
 {
+    [System.Serializable]
     public class Armor : Item
     {
         public Armor() { }
