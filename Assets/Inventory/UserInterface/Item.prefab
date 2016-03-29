@@ -219,6 +219,9 @@ GameObject:
   - 4: {fileID: 451076}
   - 114: {fileID: 11490242}
   - 114: {fileID: 11488834}
+  - 114: {fileID: 11436004}
+  - 65: {fileID: 6538232}
+  - 114: {fileID: 11472012}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -552,6 +555,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 407186}
   m_RootOrder: 0
+--- !u!65 &6538232
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 175342}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 342.9, y: 85, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11405190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -662,7 +677,7 @@ MonoBehaviour:
   mPivot: 5
   mDepth: 4
   mFont: {fileID: 11400000, guid: 16a2d4ace59bac64dbcf4085964b38eb, type: 2}
-  mText: 'DMG:'
+  mText: 'Damage:'
   mMaxLineWidth: 0
   mMaxLineHeight: 0
   mEncoding: 1
@@ -737,6 +752,19 @@ MonoBehaviour:
   runOnlyOnce: 0
   relativeOffset: {x: 0.075, y: 0}
   pixelOffset: {x: 0, y: 0}
+--- !u!114 &11436004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 175342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f02842fa4878db54f9587ff4de7d9f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  draggablePanel: {fileID: 0}
+  panel: {fileID: 0}
 --- !u!114 &11445082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -849,6 +877,21 @@ MonoBehaviour:
   repositionNow: 0
   sorted: 0
   hideInactive: 1
+--- !u!114 &11472012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 175342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff506ad1b861c0428b02d8227621a95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateInterval: 0.1
+  boxCollider: {fileID: 6538232}
+  uiCamera: {fileID: 0}
+  relativeSize: 0.9
 --- !u!114 &11473254
 MonoBehaviour:
   m_ObjectHideFlags: 1
