@@ -26,6 +26,12 @@ namespace Networking
             networkClient.RegisterHandler(NetworkMessageType.AddItem, OnAddItem);
             networkClient.RegisterHandler(NetworkMessageType.AddItems, OnAddItems);
             networkClient.Connect(networkManager.serverIp, networkManager.serverPort);
+
+            items.Add(new Weapon("Blade of Justice", 10, 10, 15));
+            items.Add(new Armor("Armor of Balance", 100, 10));
+            items.Add(new Consumable("Potion of Health"));
+            networkManager.itemManager.CreateItems(items);
+
         }
 
         /// <summary> Event for new connection to server </summary
@@ -74,6 +80,8 @@ namespace Networking
 
                 items.Add(tempItem);
             }
+
+            networkManager.itemManager.CreateItems(items);
         }
     }
 }

@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 using Items;
+using UserInterface;
 
 namespace Networking
 {
@@ -25,6 +26,8 @@ namespace Networking
     {
         public int serverPort = 8888;
         public string serverIp = "127.0.0.1";
+
+        public ItemManager itemManager;
 
         public IApplication NetworkApplication { get { return application; } }
         IApplication application = null;
