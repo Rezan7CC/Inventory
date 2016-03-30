@@ -86,7 +86,10 @@ namespace UserInterface
                     strechableButton.transform.localPosition = new Vector3(strechableButton.transform.localPosition.x, childPosition, 0);
                     childPosition += singleSize;
                 }
+                strechableButton.ApplyScale();
             }
+
+            oneRunCompleted = true;
         }
     }
 }
