@@ -7,52 +7,82 @@ namespace UserInterface
 {
     public class ItemManager : MonoBehaviour
     {
-        public UIGrid itemGrid;
+        public UIGrid weaponsGrid;
+        public UIGrid armorsGrid;
+        public UIGrid consumablesGrid;
         public GameObject itemPrefab;
-
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-
-        }
-
-        public void CreateItems(IList<Item> items)
-        {
-            Transform[] childs = itemGrid.GetComponentsInChildren<Transform>();
-            foreach(Transform child in childs)
-            {
-                if (child == itemGrid.transform)
-                    continue;
-                Destroy(child.gameObject);
-            }
-
-            foreach(Item item in items)
-            {
-                GameObject itemGameObject = Instantiate(itemPrefab) as GameObject;
-                ItemProperties itemProperties = itemGameObject.GetComponent<ItemProperties>();
-                SetItemProperties(itemProperties, item);
-                itemGameObject.transform.parent = itemGrid.transform;
-                itemGameObject.transform.position = Vector3.zero;
-                itemGameObject.transform.localScale = Vector3.one;
-                itemGameObject.transform.localRotation = Quaternion.identity;         
-            }
-            itemGrid.Reposition();
-        }
 
         enum ItemType
         {
             EWeapon, EArmor, EConsumable, ENone
         };
 
+        public void CreateItems(IList<Item> items)
+        {
+            ClearItemGrid(weaponsGrid);
+            ClearItemGrid(armorsGrid);
+            ClearItemGrid(consumablesGrid);
+
+            foreach(Item item in items)
+            {
+                GameObject itemGameObject = Instantiate(itemPrefab) as GameObject;
+                ItemProperties itemProperties = itemGameObject.GetComponent<ItemProperties>();
+                SetItemProperties(itemProperties, item);
+
+                ItemType itemType = GetItemType(item);
+                switch (itemType)
+                {
+                    case ItemType.EWeapon:
+                        itemGameObject.transform.parent = weaponsGrid.transform;
+                        break;
+                    case ItemType.EArmor:
+                        itemGameObject.transform.parent = armorsGrid.transform;
+                        break;
+                    case ItemType.EConsumable:
+                        itemGameObject.transform.parent = consumablesGrid.transform;
+                        break;
+                }
+
+                itemGameObject.transform.position = Vector3.zero;
+                itemGameObject.transform.localScale = Vector3.one;
+                itemGameObject.transform.localRotation = Quaternion.identity;         
+            }
+
+            weaponsGrid.Reposition();
+            armorsGrid.Reposition();
+            consumablesGrid.Reposition();
+        }
+
+        void ClearItemGrid(UIGrid itemGrid)
+        {
+            Transform[] childs = itemGrid.GetComponentsInChildren<Transform>();
+            foreach (Transform child in childs)
+            {
+                if (child == itemGrid.transform)
+                    continue;
+                Destroy(child.gameObject);
+            }
+        }
+
+        ItemType GetItemType(Item item)
+        {
+            ItemType itemType = ItemType.ENone;
+
+            if (item is Weapon)
+                itemType = ItemType.EWeapon;
+            else if (item is Armor)
+                itemType = ItemType.EArmor;
+            else if (item is Consumable)
+                itemType = ItemType.EConsumable;
+
+            return itemType;
+        }
+        
         void SetItemProperties(ItemProperties itemProperties, Item item)
         {
             ItemType itemType = ItemType.ENone;
 
-            Weapon weapon = item as Weapon; 
+            Weapon weapon = item as Weapon;
             Armor armor = item as Armor;
             Consumable consumable = item as Consumable;
 
