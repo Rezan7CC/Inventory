@@ -81,7 +81,6 @@ namespace Networking
         /// <summary> Convert item array into network packages and send them to a client </summary>
         public void SendItems(int connectionId, Item[] items, int arraySize)
         {
-
             /// Create packages while there are unpackaged items left
             int i = 0;
             while(i < arraySize)
@@ -100,7 +99,6 @@ namespace Networking
                         #endif
                         break;
                     }
-                    if (i >= arraySize)
 
                     itemPackage[ii] = items[i];
                 }

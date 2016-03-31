@@ -10,7 +10,7 @@ namespace Database
 {
     public class DatabaseManager
     {
-        public static string dbFilename = "test.db";
+        public static string dbFilename = "Inventory.db";
         public static bool IsConnected { get { return IsConnected; } }
         private static bool isConnected = false;
 
