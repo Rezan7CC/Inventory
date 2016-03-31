@@ -15,6 +15,7 @@ namespace UserInterface
 
         public Color activeColor;
         public Color inactiveColor;
+        public GameObject draggablePanel;
 
         void Start()
         {
@@ -28,6 +29,10 @@ namespace UserInterface
             SetWeaponsActive(true);
             SetArmorsActive(false);
             SetConsumablesActive(false);
+
+            UIGrid tempGrid = weaponsGrid.GetComponent<UIGrid>() as UIGrid;
+            tempGrid.repositionNow = true;
+            ((Transform)draggablePanel.GetComponent<Transform>()).localPosition = Vector3.zero;
         }
 
         public void OnArmorsClick()
@@ -35,6 +40,10 @@ namespace UserInterface
             SetWeaponsActive(false);
             SetArmorsActive(true);
             SetConsumablesActive(false);
+
+            UIGrid tempGrid = armorsGrid.GetComponent<UIGrid>() as UIGrid;
+            tempGrid.repositionNow = true;
+            ((Transform)draggablePanel.GetComponent<Transform>()).localPosition = Vector3.zero;
         }
 
         public void OnConsumablesClick()
@@ -42,6 +51,10 @@ namespace UserInterface
             SetWeaponsActive(false);
             SetArmorsActive(false);
             SetConsumablesActive(true);
+
+            UIGrid tempGrid = consumablesGrid.GetComponent<UIGrid>() as UIGrid;
+            tempGrid.repositionNow = true;
+            ((Transform)draggablePanel.GetComponent<Transform>()).localPosition = Vector3.zero;
         }
 
         void SetWeaponsActive(bool active)

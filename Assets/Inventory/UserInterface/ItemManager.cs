@@ -48,9 +48,9 @@ namespace UserInterface
                 itemGameObject.transform.localRotation = Quaternion.identity;         
             }
 
-            weaponsGrid.Reposition();
-            armorsGrid.Reposition();
-            consumablesGrid.Reposition();
+            weaponsGrid.repositionNow = true;
+            armorsGrid.repositionNow = true;
+            consumablesGrid.repositionNow = true;
         }
 
         void ClearItemGrid(UIGrid itemGrid)
