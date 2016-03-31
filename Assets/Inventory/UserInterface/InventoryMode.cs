@@ -14,6 +14,8 @@ namespace UserInterface
         public Color activeColor;
         public Color inactiveColor;
 
+        public ItemMode itemMode;
+
         void Start()
         {
             SetInventoryPanelActive(true);
@@ -24,12 +26,28 @@ namespace UserInterface
         {
             SetInventoryPanelActive(true);
             SetDeveloperPanelActive(false);
+
+            EnableItemButtons(true);
+            itemMode.OnWeaponsClick();
         }
 
         public void OnDeveloperClick()
         {
             SetInventoryPanelActive(false);
             SetDeveloperPanelActive(true);
+
+            EnableItemButtons(false);
+        }
+
+        void EnableItemButtons(bool enabled)
+        {
+            itemMode.weaponsButton.UpdateColor(enabled, true);
+            itemMode.armorsButton.UpdateColor(enabled, true);
+            itemMode.consumablesButton.UpdateColor(enabled, true);
+
+            ((Collider)itemMode.weaponsButton.GetComponent<Collider>()).enabled = enabled;
+            ((Collider)itemMode.armorsButton.GetComponent<Collider>()).enabled = enabled;
+            ((Collider)itemMode.consumablesButton.GetComponent<Collider>()).enabled = enabled;
         }
 
         void SetInventoryPanelActive(bool active)
