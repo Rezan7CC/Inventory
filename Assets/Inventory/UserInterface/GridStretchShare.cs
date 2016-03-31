@@ -12,9 +12,9 @@ namespace UserInterface
             StretchableButton stretchableButton02 = object02 as StretchableButton;
             float positionDiff = 0.0f;
             if (stretchableButton01.stretch.style == UIStretch.Style.Horizontal)
-                positionDiff = stretchableButton01.stretch.transform.position.x - stretchableButton02.stretch.transform.position.x;
+                positionDiff = stretchableButton02.stretch.transform.position.x - stretchableButton01.stretch.transform.position.x;
             else
-                positionDiff = stretchableButton01.stretch.transform.position.y - stretchableButton02.stretch.transform.position.y;
+                positionDiff = stretchableButton02.stretch.transform.position.y - stretchableButton01.stretch.transform.position.y;
 
             return (int)(100.0f * positionDiff);
         }
@@ -56,6 +56,7 @@ namespace UserInterface
                 return;
             StretchComparer stretchComparer = new StretchComparer();
             Array.Sort(stretchableButtons, stretchComparer);
+            int i = 0;
 
             float singleSize = 0.0f;
             float totalSize = 0.0f;
