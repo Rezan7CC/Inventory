@@ -30,9 +30,7 @@ namespace UserInterface
             SetArmorsActive(false);
             SetConsumablesActive(false);
 
-            UIGrid tempGrid = weaponsGrid.GetComponent<UIGrid>() as UIGrid;
-            tempGrid.repositionNow = true;
-            ((Transform)draggablePanel.GetComponent<Transform>()).localPosition = Vector3.zero;
+            ResetDraggablePanel();
         }
 
         public void OnArmorsClick()
@@ -41,9 +39,7 @@ namespace UserInterface
             SetArmorsActive(true);
             SetConsumablesActive(false);
 
-            UIGrid tempGrid = armorsGrid.GetComponent<UIGrid>() as UIGrid;
-            tempGrid.repositionNow = true;
-            ((Transform)draggablePanel.GetComponent<Transform>()).localPosition = Vector3.zero;
+            ResetDraggablePanel();
         }
 
         public void OnConsumablesClick()
@@ -52,9 +48,19 @@ namespace UserInterface
             SetArmorsActive(false);
             SetConsumablesActive(true);
 
-            UIGrid tempGrid = consumablesGrid.GetComponent<UIGrid>() as UIGrid;
+            ResetDraggablePanel();
+        }
+
+        void ResetDraggablePanel()
+        {
+            UIGrid tempGrid = armorsGrid.GetComponent<UIGrid>() as UIGrid;
             tempGrid.repositionNow = true;
+            ((UIDraggablePanel)draggablePanel.GetComponent<UIDraggablePanel>()).ResetPosition();
             ((Transform)draggablePanel.GetComponent<Transform>()).localPosition = Vector3.zero;
+            UIPanel panel = draggablePanel.GetComponent<UIPanel>() as UIPanel;
+            Vector4 panelCullingRegion = panel.clipRange;
+            panelCullingRegion.y = -55;
+            panel.clipRange = panelCullingRegion;
         }
 
         void SetWeaponsActive(bool active)
