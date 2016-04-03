@@ -59,6 +59,9 @@ namespace Networking
             #endif
 
             items.Add(itemMsg.item);
+
+            networkManager.itemManager.CreateItems(items);
+            networkManager.itemMode.ResetDraggablePanel();
         }
 
         /// <summary> Event for multiple items packet message </summary>
@@ -82,6 +85,13 @@ namespace Networking
             }
 
             networkManager.itemManager.CreateItems(items);
+        }
+
+        public void SendItem(Item item)
+        {
+            ItemMessage addItemMessage = new ItemMessage();
+            addItemMessage.item = item;
+            networkClient.Send(NetworkMessageType.AddItem, addItemMessage);
         }
     }
 }

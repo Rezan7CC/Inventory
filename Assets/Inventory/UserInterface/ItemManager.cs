@@ -23,7 +23,7 @@ namespace UserInterface
             ClearItemGrid(armorsGrid);
             ClearItemGrid(consumablesGrid);
 
-            foreach(Item item in items)
+            foreach (Item item in items)
             {
                 GameObject itemGameObject = Instantiate(itemPrefab) as GameObject;
                 ItemProperties itemProperties = itemGameObject.GetComponent<ItemProperties>();

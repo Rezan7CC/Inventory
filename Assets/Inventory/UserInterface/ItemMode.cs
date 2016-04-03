@@ -51,7 +51,7 @@ namespace UserInterface
             ResetDraggablePanel();
         }
 
-        void ResetDraggablePanel()
+        public void ResetDraggablePanel()
         {
             UIGrid tempGrid = armorsGrid.GetComponent<UIGrid>() as UIGrid;
             tempGrid.repositionNow = true;

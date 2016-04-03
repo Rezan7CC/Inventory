@@ -54,6 +54,10 @@ namespace Networking
 
             ItemMessage itemMessage = addItemMsg.ReadMessage<ItemMessage>();
             Item item = itemMessage.item;
+            if (item == null)
+                return;
+
+            DatabaseManager.AddItem(item);
 
             RedirectItem(addItemMsg.conn.connectionId, item);
         }
@@ -63,7 +67,7 @@ namespace Networking
         {
             foreach(NetworkConnection connection in NetworkServer.connections)
             {
-                if (connection.connectionId == connectionId)
+                if (connection == null || connection.connectionId == connectionId)
                     continue;
 
                 NetworkServer.SendToClient(connectionId, msgType, message);

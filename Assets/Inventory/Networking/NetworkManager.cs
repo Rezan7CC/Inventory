@@ -28,6 +28,7 @@ namespace Networking
         public string serverIp = "127.0.0.1";
 
         public ItemManager itemManager;
+        public ItemMode itemMode;
 
         public IApplication NetworkApplication { get { return application; } }
         IApplication application = null;

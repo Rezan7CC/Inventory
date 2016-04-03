@@ -93,6 +93,7 @@ namespace Items
                 return;
             client.InventoryItems.Add(generatedItem);
             networkManager.itemManager.CreateItems(client.InventoryItems);
+            client.SendItem(generatedItem);
         }
 
         string GenerateItemName(ItemType itemType)

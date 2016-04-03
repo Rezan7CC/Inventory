@@ -40,21 +40,25 @@ namespace Database
 
         public static void AddItem(Item item)
         {
-            Weapon weapon = (Weapon)item;
+            #if DEBUG
+            Debugging.PrintScreen("Adding item to database");
+            #endif
+
+            Weapon weapon = item as Weapon;
             if (weapon != null)
             {
                 AddWeapon(weapon);
                 return;
             }
 
-            Armor armor = (Armor)item;
+            Armor armor = item as Armor;
             if(armor != null)
             {
                 AddArmor(armor);
                 return;
             }
 
-            Consumable consumable = (Consumable)item;
+            Consumable consumable = item as Consumable;
             if (consumable != null)
             {
                 AddConsumable(consumable);
