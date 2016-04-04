@@ -4,12 +4,16 @@ using UnityEditor;
 #endif
 using Database;
 using Items;
+using Networking;
+using System;
 using System.Collections;
 
 namespace Utility
 {
     public class Debugging : MonoBehaviour
     {
+        private static bool eventsConnected = false;
+
         public static void Print(object message)
         {
             Debug.Log(message);
@@ -22,7 +26,35 @@ namespace Utility
             #endif
         }
 
-        #if SERVER && UNITY_EDITOR
+        public static void ConnectEvents()
+        {
+            if (eventsConnected)
+                return;
+
+            Server server = NetworkManager.GetServer();
+            Client client = NetworkManager.GetClient();
+
+            if (server != null)
+            {
+                server.OnSetUp += OnServerSetUp;
+            }
+            if (client != null)
+            {
+                client.OnSetUp += OnClientSetUp;
+            }
+        }
+
+        static void OnServerSetUp(object source, EventArgs args)
+        {
+            Debugging.PrintScreen("Setting up server");
+        }
+
+        static void OnClientSetUp(object source, EventArgs args)
+        {
+            Debugging.PrintScreen("Setting up client");
+        }
+
+#if SERVER && UNITY_EDITOR
         [MenuItem("Inventory.db/ResetTables")]
         public static void ResetTables()
         {
@@ -72,6 +104,6 @@ namespace Utility
             DatabaseManager.AddConsumable(new Consumable("TestConsumable03"));
             DatabaseManager.Disconnect();
         }
-        #endif
+#endif
     }
 }

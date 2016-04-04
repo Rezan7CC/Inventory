@@ -1,12 +1,15 @@
 ﻿using UnityEngine.Networking;
 using System.Collections.Generic;
+using System;
 using Items;
 using Utility;
 
 namespace Networking
 {
-    class Client : IApplication
+    public class Client : IApplication
     {
+        public EventHandler OnSetUp;
+
         NetworkManager networkManager = null;
         NetworkClient networkClient = null;
 
@@ -19,8 +22,11 @@ namespace Networking
             this.networkManager = networkManager;
 
             #if DEBUG
-            Debugging.PrintScreen("Setting up client");
+            Debugging.ConnectEvents();
+            if (OnSetUp != null)
+                OnSetUp(this, EventArgs.Empty);
             #endif
+
             networkClient = new NetworkClient();
             networkClient.RegisterHandler(MsgType.Connect, OnConnected);
             networkClient.RegisterHandler(NetworkMessageType.AddItem, OnAddItem);

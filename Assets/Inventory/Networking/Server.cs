@@ -3,11 +3,14 @@ using Items;
 using Database;
 using Utility;
 using System.Collections.Generic;
+using System;
 
 namespace Networking
 {
-    class Server : IApplication
+    public class Server : IApplication
     {
+        public EventHandler OnSetUp;
+
         NetworkManager networkManager = null;
         DatabaseManager databaseManager = new DatabaseManager();
         static int maxItemsPerPackage = 10;
@@ -18,7 +21,9 @@ namespace Networking
             this.networkManager = networkManager;
 
             #if DEBUG
-            Debugging.PrintScreen("Setting up server");
+            Debugging.ConnectEvents();
+            if(OnSetUp != null)
+              OnSetUp(this, EventArgs.Empty);
             #endif
 
             DatabaseManager.Connect();

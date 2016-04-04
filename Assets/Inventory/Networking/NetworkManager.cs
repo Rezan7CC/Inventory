@@ -31,7 +31,7 @@ namespace Networking
         public ItemMode itemMode;
 
         public IApplication NetworkApplication { get { return application; } }
-        IApplication application = null;
+        private static IApplication application = null;
 
         void Awake()
         {
@@ -42,6 +42,16 @@ namespace Networking
 #endif
 
             application.Setup(this);
+        }
+
+        public static Server GetServer()
+        {
+            return application as Server;
+        }
+
+        public static Client GetClient()
+        {
+            return application as Client;
         }
     }
 }
